@@ -42,12 +42,12 @@ function SalesPage(props) {
 export default SalesPage;
 
 export async function getStaticProps(params) {
+  const transformedSalesData = [];
   fetch(
     "https://client-side-data-fetchin-9d6cf-default-rtdb.firebaseio.com/sales.json"
   )
     .then((res) => res.json())
     .then((data) => {
-      const transformedSalesData = [];
       for (const key in data) {
         const _data = {
           id: key,
@@ -58,7 +58,7 @@ export async function getStaticProps(params) {
     });
 
   return {
-    props: { sales: transformedData },
-    revalidate: 10
+    props: { sales: transformedSalesData },
+    revalidate: 10,
   };
 }
