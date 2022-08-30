@@ -1,34 +1,30 @@
 import { Fragment, useEffect, useState } from "react";
+import useSWR from "swr";
 
-function SalesPage(params) {
-  const [isLoading, SetIsLoading] = useState(true);
+function SalesPage(props) {
+  const [sales, SetSalesData] = useState(props);
 
-  const [sales, SetSalesData] = useState();  
+  const { data, error } = useSWR(
+    "https://client-side-data-fetchin-9d6cf-default-rtdb.firebaseio.com/sales.json",
+    (url) => fetch(url).then((res) => res.json())
+  );
 
   useEffect(() => {
-    SetIsLoading(true);
-    fetch(
-      "https://client-side-data-fetchin-9d6cf-default-rtdb.firebaseio.com/sales.json"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedData = [];
+    const transformedData = [];
 
-        for (const key in data) {
-          const _data = { id: key, ...data[key] };
-          transformedData.push(_data);
-        }
-        SetSalesData(transformedData);
-        SetIsLoading(false);
-      });
-  }, []);
+    for (const key in data) {
+      const _data = { id: key, ...data[key] };
+      transformedData.push(_data);
+    }
+    SetSalesData(transformedData);
+  }, [data]);
 
-  if (isLoading) {
+  if (error) {
     return <p>Loading...</p>;
   }
 
-  if (!sales) {
-    return <p>No Sales Data Found.</p>;
+  if (!data || !sales) {
+    return <p>Loading...</p>;
   }
   return (
     <Fragment>
@@ -44,3 +40,25 @@ function SalesPage(params) {
   );
 }
 export default SalesPage;
+
+export async function getStaticProps(params) {
+  fetch(
+    "https://client-side-data-fetchin-9d6cf-default-rtdb.firebaseio.com/sales.json"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      const transformedSalesData = [];
+      for (const key in data) {
+        const _data = {
+          id: key,
+          ...data[key],
+        };
+        transformedSalesData.push(_data);
+      }
+    });
+
+  return {
+    props: { sales: transformedData },
+    revalidate: 10
+  };
+}
