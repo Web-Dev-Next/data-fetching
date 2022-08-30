@@ -17,6 +17,8 @@ export default function Home(props) {
 }
 
 export async function getStaticProps(context) {
+  console.log("index: getStaticProps(context) Run on Server Side");
+  
   const filePath = path.join(process.cwd(), "data", "dummy-data.json");
 
   const file = await fs.readFile(filePath);

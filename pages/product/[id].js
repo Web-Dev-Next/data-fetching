@@ -30,6 +30,8 @@ async function getData() {
 }
 
 export async function getStaticProps(context) {
+  console.log("[id]: getStaticProps(context) Run on Server Side");
+
   const { params } = context;
 
   const productID = params.id;
@@ -49,6 +51,8 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+  console.log("[id]: getStaticPaths() Run on Server Side");
+
   const data = await getData();
 
   const ids = data.products.map((p) => p.id);

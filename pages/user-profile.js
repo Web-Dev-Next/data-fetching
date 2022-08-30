@@ -4,8 +4,8 @@ function UserProfile(props) {
 export default UserProfile;
 
 export async function getServerSideProps(context) {
+  console.log("UserProfile: Run on Server Side");
   const { params, req, res } = context;
-  console.log(req);
   return {
     props: {
       name: "user-00",
