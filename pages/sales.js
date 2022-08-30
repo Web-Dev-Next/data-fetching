@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
 function SalesPage(props) {
-  const [sales, SetSalesData] = useState(props);
+  const [sales, SetSalesData] = useState(props.sales);
 
   const { data, error } = useSWR(
     "https://client-side-data-fetchin-9d6cf-default-rtdb.firebaseio.com/sales.json",
